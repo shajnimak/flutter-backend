@@ -10,7 +10,7 @@ function generateToken(payload) {
 
 // Verify JWT token
 function verifyToken(token) {
-    return jwt.verify(token, JWT_SECRET);
+    return jwt.verify(token, "Aasdwi383fdskj");
 }
 
 module.exports = { generateToken, verifyToken };
