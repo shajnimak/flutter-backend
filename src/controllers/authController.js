@@ -1,64 +1,50 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const { generateToken } = require('../config/jwt');
-const logger = require('../utils/logger');
+const { initializeApp } = require("firebase/app");
+const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } = require("firebase/auth");
 
-// Register a new user
-async function register(req, res) {
-    try {
-        const { username, password } = req.body;
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAvwtJoCvEOjCE_NenPmZajWxUbttxvc_E",
+  authDomain: "auth-movie-app-f319b.firebaseapp.com",
+  projectId: "auth-movie-app-f319b",
+  storageBucket: "auth-movie-app-f319b.appspot.com",
+  messagingSenderId: "976047410800",
+  appId: "1:976047410800:web:b327a84ff930e036346eb5"
+};
 
-        // Check if username already exists
-        const existingUser = await User.findOne({ username });
-        if (existingUser) {
-            logger.warn('User registration failed: Username already exists');
-            return res.status(400).json({ error: 'Username already exists' });
-        }
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
+// Получаем объект аутентификации Firebase
+const auth = getAuth();
 
-        // Create new user
-        const newUser = new User({ username, password: hashedPassword });
-        await newUser.save();
-
-        logger.info('User registered successfully');
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        logger.error('User registration failed:', error);
-        res.status(500).json({ error: 'User registration failed' });
+// Контроллер для регистрации нового пользователя
+exports.register = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
     }
-}
 
-// Login user
-async function login(req, res) {
-    try {
-        const { username, password } = req.body;
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    return res.status(200).json({ message: 'User registered successfully', user: userCredential.user });
+  } catch (error) {
+    console.error('Error registering user:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
 
-        // Find user by username
-        const user = await User.findOne({ username });
-        if (!user) {
-            logger.warn('Login failed: User not found');
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
-
-        // Compare passwords
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch) {
-            logger.warn('Login failed: Invalid password');
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
-
-        // Generate JWT token
-        const token = generateToken({ id: user._id });
-
-        logger.info('Login successful');
-        res.status(200).json({ token });
-    } catch (error) {
-        logger.error('Login failed:', error);
-        res.status(500).json({ error: 'Login failed' });
+// Контроллер для входа пользователя
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
     }
-}
 
-module.exports = { register, login };
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    return res.status(200).json({ message: 'User logged in successfully', user: userCredential.user });
+  } catch (error) {
+    console.error('Error logging in user:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
