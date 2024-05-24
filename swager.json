@@ -1,0 +1,249 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "MovieLab API",
+      "version": "1.0.0",
+      "description": "API documentation for MovieLab"
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "schemes": ["http"],
+    "paths": {
+      "/auth/register": {
+        "post": {
+          "tags": ["Auth"],
+          "summary": "Register a new user",
+          "description": "Register a new user with email and password",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "user@test.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "User registered successfully"
+            },
+            "400": {
+              "description": "Invalid input"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/auth/login": {
+        "post": {
+          "tags": ["Auth"],
+          "summary": "Login a user",
+          "description": "Login a user with email and password",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "user@test.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User logged in successfully"
+            },
+            "400": {
+              "description": "Invalid input"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/events": {
+        "get": {
+          "tags": ["Events"],
+          "summary": "Get all events",
+          "description": "Retrieve a list of all events",
+          "responses": {
+            "200": {
+              "description": "List of events"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "post": {
+          "tags": ["Events"],
+          "summary": "Create a new event",
+          "description": "Create a new event with title, description, and date",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "New Event"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Event description"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2023-12-25"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Event created successfully"
+            },
+            "400": {
+              "description": "Invalid input"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/events/{id}": {
+        "get": {
+          "tags": ["Events"],
+          "summary": "Get event by ID",
+          "description": "Retrieve an event by its ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string",
+              "example": "66473b9c5bd256323e77fe9b"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Event details"
+            },
+            "404": {
+              "description": "Event not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "put": {
+          "tags": ["Events"],
+          "summary": "Update event by ID",
+          "description": "Update an event by its ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string",
+              "example": "66473b9c5bd256323e77fe9b"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "Updated Event"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Updated description"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2024-01-01"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Event updated successfully"
+            },
+            "400": {
+              "description": "Invalid input"
+            },
+            "404": {
+              "description": "Event not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "delete": {
+          "tags": ["Events"],
+          "summary": "Delete event by ID",
+          "description": "Delete an event by its ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string",
+              "example": "66473b9c5bd256323e77fe9b"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Event deleted successfully"
+            },
+            "404": {
+              "description": "Event not found"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      }
+    }
+  }
+  
