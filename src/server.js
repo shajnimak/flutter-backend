@@ -1,8 +1,6 @@
 const app = require('./app');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-
-dotenv.config();
+const swaggerSetup = require('./swagger'); // Add this line to require swagger.js
 
 const PORT = process.env.PORT || 3000;
 
@@ -19,3 +17,5 @@ mongoose.connect("mongodb+srv://shadyman:shadyman2005@cluster0.tmrr93o.mongodb.n
 }).catch((error) => {
     console.error('Error connecting to MongoDB:', error);
 });
+
+swaggerSetup(app); // Add this line to initialize Swagger
